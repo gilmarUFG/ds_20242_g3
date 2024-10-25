@@ -1,0 +1,26 @@
+# Logs
+*.log
+
+# Dependency directory
+/node_modules
+/package-lock.json
+
+# Trash
+.DS_Store
+.idea
+
+# ESLint caches
+.eslintcache
+
+# Dynamically processed files
+reports
+coverage
+build
+i18n
+errorshots
+
+# Mocks
+mocks/development/
+
+#asdf
+.tool-versions
