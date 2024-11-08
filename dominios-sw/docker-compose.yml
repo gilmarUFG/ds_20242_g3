@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: postgres-filmes
+    environment:
+      - POSTGRES_USER=filmes_user
+      - POSTGRES_PASSWORD=filmes_password
+      - POSTGRES_DB=filmesdb
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
