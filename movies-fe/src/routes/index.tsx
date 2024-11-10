@@ -6,7 +6,7 @@ import { NavBar } from '../components/layout/NavBar';
 const ComponentRoutes: React.FunctionComponent = () => {
   return (
     <BrowserRouter>
-      <NavBar/>
+      <NavBar />
       <Routes>
         <Route element={<Home />} path="/" />
       </Routes>
