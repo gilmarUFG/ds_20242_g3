@@ -9,7 +9,7 @@ logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s",
     handlers=[
         logging.StreamHandler(), 
-        logging.FileHandler("recommender.log", mode="a")
+        logging.FileHandler("../logs/recommender.log", mode="a")
     ]
 )
 
