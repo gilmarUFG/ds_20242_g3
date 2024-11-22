@@ -23,6 +23,20 @@ async def get_recommendations(query: str = Query(..., description="Texto para re
 #        "count": len(recommendations),
     }
 
+@app.get("/recommendations/user")
+async def get_recommendations_user(): 
+    """            
+    user_content: possui avaliacao media de 14 generos
+    dimensoes user_content: 14 
+    user_vectir>                                                                                          
+    endpoint para obter recomendações baseadas nas avaliações médias do usuário.
+    """
+#    recommendations = recommender.recommend(query, top_k)
+    return {
+#        "recommendations": recommendations,
+#        "count": len(recommendations),
+    }
+
 
 if __name__ == "__main__":
     import uvicorn
