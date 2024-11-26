@@ -3,6 +3,9 @@ package com.ufg.dominios_sw.service;
 import com.ufg.dominios_sw.domain.Movie;
 import com.ufg.dominios_sw.repository.MoviesRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,10 +16,12 @@ public class MovieService {
     private final MoviesRepository movieRepository;
 
     public Movie findById(Long id) {
-        return movieRepository.findById(id).orElse(null);
+        return movieRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Movie not found with id: " + id));
     }
 
-    public List<Movie> findAll() {
-        return movieRepository.findAll();
+    public Page<Movie> findAll(Long genreId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return movieRepository.findMoviesByGenreIdNative(genreId, pageable);
     }
 }
