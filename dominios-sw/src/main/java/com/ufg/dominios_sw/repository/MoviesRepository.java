@@ -1,7 +1,19 @@
 package com.ufg.dominios_sw.repository;
 
 import com.ufg.dominios_sw.domain.Movie;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface MoviesRepository extends JpaRepository<Movie, Long> {
+    @Query(value = "SELECT m.* FROM movies m " +
+            "LEFT JOIN movie_genres mg ON m.id = mg.movie_id " +
+            "WHERE (:genreId IS NULL OR mg.genre_id = :genreId)",
+            countQuery = "SELECT COUNT(*) FROM movies m " +
+                    "LEFT JOIN movie_genres mg ON m.id = mg.movie_id " +
+                    "WHERE (:genreId IS NULL OR mg.genre_id = :genreId)",
+            nativeQuery = true)
+    Page<Movie> findMoviesByGenreIdNative(@Param("genreId") Long genreId, Pageable pageable);
 }
