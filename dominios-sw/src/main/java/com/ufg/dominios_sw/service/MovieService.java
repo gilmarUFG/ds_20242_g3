@@ -24,4 +24,9 @@ public class MovieService {
         Pageable pageable = PageRequest.of(page, size);
         return movieRepository.findMoviesByGenreIdNative(genreId, pageable);
     }
+
+    public Page<Movie> findAllByIds(List<Long> ids, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return movieRepository.findAllByIds(ids, pageable);
+    }
 }

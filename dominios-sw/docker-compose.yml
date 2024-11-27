@@ -21,6 +21,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/filmesdb
       SPRING_DATASOURCE_USERNAME: filmes_user
       SPRING_DATASOURCE_PASSWORD: filmes_password
+      FASTAPI_URL: http://fastapi:8000
     ports:
       - "8080:8080"
     depends_on:

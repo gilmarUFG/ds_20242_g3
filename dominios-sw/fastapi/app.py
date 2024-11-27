@@ -32,8 +32,10 @@ class GenreRecommendation(BaseModel):
 
 @app.post("/average")
 async def process_average_recommendation(data: AverageRecommendation):
-    return {"message": "Processed Average Recommendation", "data": data}
+    recommended_movie_ids = [1, 3, 5, 7, 9, 11]
+    return {"movieIds": recommended_movie_ids}
 
-@app.post("/genre")
+@app.post("/genre")67
 async def process_genre_recommendation(data: GenreRecommendation):
-    return {"message": "Processed Genre Recommendation", "data": data}
+    recommended_movie_ids = [1, 3, 5, 7, 9, 11]
+    return {"movieIds": recommended_movie_ids}
