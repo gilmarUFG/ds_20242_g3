@@ -1,7 +1,13 @@
 import { createBrowserRouter } from 'react-router-dom';
-import App from '../App';
+import Layout from '../components/templates/Layout';
+import Home from '../components/pages/Home';
+import Login from '../components/pages/Login';
 
 export const routes = createBrowserRouter([
-  { path: '/', element: <App /> },
-  { path: '/films', element: <App /> },
+  {
+    path: 'assista-ai',
+    element: <Layout />,
+    children: [{ path: '', element: <Home /> }],
+  },
+  { path: 'login', element: <Login /> },
 ]);
