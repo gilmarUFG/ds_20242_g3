@@ -1,5 +1,5 @@
-import { Grid } from '@mui/material';
-import { FilmCard } from '../../atomic/Card';
+import { Grid2 } from '@mui/material';
+import { FilmCard } from '../atomic/Card';
 
 export function Home() {
   const listFilm = [
@@ -8,18 +8,23 @@ export function Home() {
     'https://starwars-visualguide.com/assets/img/films/3.jpg',
   ];
   return (
-    <Grid container spacing={6} className="container">
-      <h1>Home Page</h1>
-      <Grid
+    <Grid2 container className="container">
+      <h1>Filmes</h1>
+      <Grid2
         container
         spacing={3}
-        sx={{ padding: 20, gap: 5, justifyContent: 'center', display: 'flex' }}
+        sx={{
+          padding: 10,
+          gap: 5,
+          justifyContent: 'center',
+          display: 'flex',
+        }}
       >
         {listFilm.map((item) => (
           <FilmCard src={item} />
         ))}
-      </Grid>
-    </Grid>
+      </Grid2>
+    </Grid2>
   );
 }
 

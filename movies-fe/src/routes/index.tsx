@@ -1,12 +1,11 @@
-import { Home } from '../components/pages/Home/home';
+import { Home } from '../components/pages/Home';
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { NavBar } from '../components/layout/NavBar';
+import { NavBar } from '../components/templates/NavBar';
 
 const ComponentRoutes: React.FunctionComponent = () => {
   return (
     <BrowserRouter>
-      <NavBar/>
       <Routes>
         <Route element={<Home />} path="/" />
       </Routes>
