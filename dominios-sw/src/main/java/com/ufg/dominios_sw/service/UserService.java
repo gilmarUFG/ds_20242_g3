@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -17,14 +18,32 @@ public class UserService {
     }
 
     public User findById(Long id) {
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
     }
 
-    public void deleteById(Long id) {
-        userRepository.deleteById(id);
-    }
+    public User updatePartial(Long id, Map<String, Object> updates) {
+        User user = findById(id);
 
-    public User update(User user) {
+        updates.forEach((key, value) -> {
+            switch (key) {
+                case "name":
+                    user.setName((String) value);
+                    break;
+                case "age":
+                    user.setAge((Integer) value);
+                    break;
+                case "email":
+                    user.setEmail((String) value);
+                    break;
+                case "password":
+                    user.setPassword((String) value);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Cannot update field: " + key);
+            }
+        });
+
         return userRepository.save(user);
     }
 }
