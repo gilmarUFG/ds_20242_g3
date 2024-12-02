@@ -5,8 +5,11 @@ export const GlobalStyle = createGlobalStyle`
         --background: linear-gradient(135deg, #31213e 0%, #191249 50%, #070325 100%);
         --red: #f2295b;
         --purple: #532d8c;
-        --purpleh1: #633e94;
+        --purpleh1: #312257;
         --white: #f3f5f7;
+        --light: #31213e;
+        --dark: #070325;
+        --primary: #13114a;
 
     }
 
@@ -68,5 +71,33 @@ export const GlobalStyle = createGlobalStyle`
         justify-content: center;
         flex-direction: column;
         align-items: center;
+    }
+
+    .login-container {
+        margin-top: 50px;
+        min-height: 500px;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card-login {
+        height: 400px;
+        width: 400px;
+        display: flex;
+        justify-content: center;
+        background-color: var(--purpleh1);
+
+        p {
+            color: var(--white);
+        }
+    }
+
+    .active-link {
+        text-shadow: 0 0 10px rgb(142, 48, 193), /* Sombra luminosa ao redor */ 0 0 20px rgb(148, 106, 214),
+        0 0 30px rgb(137, 104, 161);
+        text-decoration: none;
+        color: var(--white);
     }
 `;
