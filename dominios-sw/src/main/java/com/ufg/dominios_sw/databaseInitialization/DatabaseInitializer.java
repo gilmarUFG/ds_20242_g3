@@ -1,6 +1,7 @@
 package com.ufg.dominios_sw.databaseInitialization;
 
 import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvException;
 import com.opencsv.exceptions.CsvValidationException;
 import com.ufg.dominios_sw.domain.Genre;
@@ -12,7 +13,15 @@ import com.ufg.dominios_sw.repository.MoviesRepository;
 import com.ufg.dominios_sw.repository.RatingRepository;
 import com.ufg.dominios_sw.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
+import java.io.FileWriter;
+import java.io.InputStream;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.FileReader;
@@ -27,7 +36,7 @@ public class DatabaseInitializer {
     private final RatingRepository ratingRepository;
     private final UserRepository userRepository;
     private final GenreRepository genreRepository;
-    private static Integer LIMIT = 100000;
+    private static final Integer LIMIT = 250000;
 
     public void init() throws IOException, CsvException, InterruptedException {
         System.out.println("Populando dados...");
@@ -40,7 +49,7 @@ public class DatabaseInitializer {
 
     private void populateMovies() throws IOException, CsvValidationException {
         try (CSVReader reader = new CSVReader(
-                new InputStreamReader(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("metadata/movies_metadata.csv")))
+                new InputStreamReader(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("metadata/filtered_movies_metadata.csv")))
         )) {
             String[] row;
             int index = 0; // Para rastrear o índice atual
@@ -181,6 +190,64 @@ public class DatabaseInitializer {
         }
 
         return genres;
+    }
+
+    private void filterMoviesMetadata() throws IOException, CsvException {
+        // Carregar os IDs dos filmes desejados a partir do arquivo Excel
+        Set<String> tmdbIds = new HashSet<>();
+        try (
+                InputStream file = Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("metadata/id_filmes_utilizados.xlsx"));
+                Workbook workbook = WorkbookFactory.create(file)
+        ) {
+            Sheet sheet = workbook.getSheetAt(0); // Supondo que os dados estão na primeira aba
+            int tmdbIdColumnIndex = 2; // Coluna "tmdbId" (índice 2, já que é a terceira coluna)
+            boolean isFirstRow = true; // Controle para ignorar o cabeçalho
+
+            for (Row row : sheet) {
+                if (isFirstRow) { // Ignorar a primeira linha (cabeçalho)
+                    isFirstRow = false;
+                    continue;
+                }
+
+                Cell cell = row.getCell(tmdbIdColumnIndex);
+                if (cell != null) {
+                    String tmdbId;
+
+                    if (cell.getCellType() == CellType.NUMERIC) { // Se for numérico, converte para String
+                        tmdbId = String.valueOf((int) cell.getNumericCellValue());
+                    } else if (cell.getCellType() == CellType.STRING) { // Se for texto, pega o valor diretamente
+                        tmdbId = cell.getStringCellValue();
+                    } else {
+                        continue; // Pula células que não sejam numéricas ou texto
+                    }
+
+                    tmdbIds.add(tmdbId);
+                }
+            }
+        }
+
+        // Processar o arquivo movies_metadata em fluxo
+        try (
+                CSVReader metadataReader = new CSVReader(
+                        new InputStreamReader(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("metadata/movies_metadata.csv")))
+                );
+                CSVWriter writer = new CSVWriter(new FileWriter("filtered_movies_metadata.csv"))
+        ) {
+            String[] row;
+            boolean isFirstRow = true; // Controle para ignorar o cabeçalho
+
+            while ((row = metadataReader.readNext()) != null) {
+                if (isFirstRow) { // Escrever o cabeçalho diretamente no arquivo filtrado
+                    writer.writeNext(row);
+                    isFirstRow = false;
+                    continue;
+                }
+
+                if (row.length > 5 && tmdbIds.contains(row[5])) { // Garantir que a coluna ID está disponível
+                    writer.writeNext(row); // Escrever linha correspondente no arquivo
+                }
+            }
+        }
     }
 
 }
