@@ -1,44 +1,16 @@
 import logging
 import numpy as np
+import pandas as pd
 from tensorflow.keras.models import load_model
-import tensorflow as tf
 from typing import List
 import os
 from numpy import genfromtxt
 from collections import defaultdict
 import csv
-import re
 import json
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from .layers import L2Normalize
 
-
-# logging.basicConfig(
-#     level=logging.INFO,
-#     format="%(asctime)s - %(levelname)s - %(message)s",
-#     handlers=[
-#         logging.StreamHandler(), 
-#         logging.FileHandler("./logs/recommender.log", mode="a")
-#     ]
-# )
-
-
-
-class L2Normalize(tf.keras.layers.Layer):
-    def __init__(self, axis=1, **kwargs):
-        super(L2Normalize, self).__init__(**kwargs)
-        self.axis = axis
-
-    def call(self, inputs):
-        return tf.linalg.l2_normalize(inputs, axis=self.axis)
-
-    def get_config(self):
-        config = super(L2Normalize, self).get_config()
-        config.update({"axis": self.axis})
-        return config
-
-    @classmethod
-    def from_config(cls, config):
-        return cls(**config)
     
 
 models = {
@@ -54,7 +26,7 @@ class Recommender:
         self.scaler = MinMaxScaler((-1, 1))
         self.scaledata = True
 
-        self.item_train, self.user_train, self.y_train, self.item_vecs, self.movie_dict = self.load_data()
+        self.item_train, self.user_train, self.y_train, self.item_vecs, self.movie_dict, self.cos_sim_data = self.load_data()
 
         self.scalerItem.fit(self.item_train)
         self.scalerUser.fit(self.user_train)
@@ -69,7 +41,7 @@ class Recommender:
         count = 0
         movies_listed = defaultdict(int)
         results = []
-
+        print(item)
         for i in range(0, y_p.shape[0]):
             if count == top_k:
                 break
@@ -80,14 +52,14 @@ class Recommender:
             count += 1
 
             results.append({
-                "movie_id": movie_id,
-                "y_p": float(y_p[i, 0]),  # Garantir que seja serializável
-                "title": movie_dict[movie_id]['title'],
-                "genres": movie_dict[movie_id]['genres']
+                "tmdbId": movie_id
+                #"y_p": float(y_p[i, 0]),  # Garantir que seja serializável
+                #"title": movie_dict[movie_id]['title'],
+                #"genres": movie_dict[movie_id]['genres']
             })
 
     # Encapsula o resultado dentro de "recommendations_users"
-        return json.dumps({"recommendations_users": results}, indent=4) 
+        return json.dumps(results, indent=4) 
 
         
     def load_data(self):
@@ -95,12 +67,12 @@ class Recommender:
         user_train = genfromtxt('./notebooks/data/content_user_train.csv', delimiter=',')
         y_train    = genfromtxt('./notebooks/data/content_y_train.csv', delimiter=',')
 
-        item_vecs = genfromtxt('./notebooks/data/content_item_vecs.csv', delimiter=',')
+        item_vecs = genfromtxt('./notebooks/new_user_data/content_item_vecs_2.csv', delimiter=',')
         
         movie_dict = defaultdict(dict)
         count = 0
     #    with open('./data/movies.csv', newline='') as csvfile:
-        with open('./notebooks/data/content_movie_list.csv', newline='') as csvfile:
+        with open('./notebooks/new_user_data/content_movie_list_2.csv', newline='') as csvfile:
             reader = csv.reader(csvfile, delimiter=',', quotechar='"')
             for line in reader:
                 if count == 0: 
@@ -112,7 +84,15 @@ class Recommender:
                     movie_dict[movie_id]["title"] = line[1]  
                     movie_dict[movie_id]["genres"] =line[2]  
 
-        return(item_train, user_train, y_train, item_vecs, movie_dict)
+        self.movie_test = pd.read_csv('./notebooks/new_user_data/content_movie_list_2.csv')
+
+        self.indices = pd.Series(self.movie_test.index, index=self.movie_test['title'])
+        
+        cos_sim_data = pd.read_excel("./notebooks/dados_recomendacao/recomendacao_baseada_conteudo.xlsx")
+
+        print("carreguei tudo!!!")
+
+        return(item_train, user_train, y_train, item_vecs, movie_dict, cos_sim_data)
 
     def load_models(self, model_name: str, model_path: str):
         if model_name not in self.__models:
@@ -168,3 +148,34 @@ class Recommender:
         json_recommendation = self.get_pred_movies_json(sorted_ypu, sorted_user, sorted_items, self.movie_dict, count)
 
         return json_recommendation
+    
+    def recommend_content(self, query, count) -> str:
+        print(f"query dentro de recommend_content: {query}")
+        json_recommendation = self.get_query_recommendations(query, count)
+
+        return json_recommendation
+
+    
+    def get_query_recommendations(self, title, N=30):
+        idx = self.indices[title]
+        
+        sim_scores = list(enumerate(self.cos_sim_data[idx]))
+        sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+        sim_scores = sim_scores[0:N+1]  # seleciona os top-n (contabilizando o proprio filme, se nao alterar indices 1:N+1)
+        
+        movie_indices = [i[0] for i in sim_scores]
+        
+        sim_scores = pd.DataFrame(sim_scores, columns=['index', 'similarity_score'])
+        final_data = self.movie_test.iloc[movie_indices]
+        final_data = final_data.merge(sim_scores, left_index=True, right_on='index')
+        
+        final_data['similarity_score'] = round(final_data['similarity_score'] * 100, 2)
+        del final_data['index']
+        del final_data['title']
+        del final_data['similarity_score']
+        del final_data['genres']
+
+        # df to json
+        result_json = final_data.to_json(orient='records')
+        
+        return result_json
