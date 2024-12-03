@@ -63,16 +63,16 @@ class Recommender:
 
         
     def load_data(self):
-        item_train = genfromtxt('./notebooks/data/content_item_train.csv', delimiter=',')
-        user_train = genfromtxt('./notebooks/data/content_user_train.csv', delimiter=',')
-        y_train    = genfromtxt('./notebooks/data/content_y_train.csv', delimiter=',')
+        item_train = genfromtxt('../data/scalers/content_item_train.csv', delimiter=',')
+        user_train = genfromtxt('../data/scalers/content_user_train.csv', delimiter=',')
+        y_train    = genfromtxt('../data/scalers/content_y_train.csv', delimiter=',')
 
-        item_vecs = genfromtxt('./notebooks/new_user_data/content_item_vecs_2.csv', delimiter=',')
+        item_vecs = genfromtxt('../data/content_item_vecs_2.csv', delimiter=',')
         
         movie_dict = defaultdict(dict)
         count = 0
     #    with open('./data/movies.csv', newline='') as csvfile:
-        with open('./notebooks/new_user_data/content_movie_list_2.csv', newline='') as csvfile:
+        with open('../data/content_movie_list_2.csv', newline='') as csvfile:
             reader = csv.reader(csvfile, delimiter=',', quotechar='"')
             for line in reader:
                 if count == 0: 
@@ -84,11 +84,11 @@ class Recommender:
                     movie_dict[movie_id]["title"] = line[1]  
                     movie_dict[movie_id]["genres"] =line[2]  
 
-        self.movie_test = pd.read_csv('./notebooks/new_user_data/content_movie_list_2.csv')
+        self.movie_test = pd.read_csv('../data/content_movie_list_2.csv')
 
         self.indices = pd.Series(self.movie_test.index, index=self.movie_test['title'])
         
-        cos_sim_data = pd.read_excel("./notebooks/dados_recomendacao/recomendacao_baseada_conteudo.xlsx")
+        cos_sim_data = pd.read_excel("../data/cos_sim.xlsx")
 
         #print("carreguei tudo!!!")
 
