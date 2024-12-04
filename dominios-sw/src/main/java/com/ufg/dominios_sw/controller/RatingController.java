@@ -26,8 +26,19 @@ public class RatingController {
     }
 
     @GetMapping
-    public List<Rating> findAll() {
-        return ratingService.findAll();
+    public ResponseEntity<PagedApiResponse<UserRating>> findAll(
+                                @RequestParam(defaultValue = "0") int page,
+                                @RequestParam(defaultValue = "10") int size
+    ) {
+        var ratings = ratingService.findAll(page, size);
+        var ratingsDetails = ratings.map(UserRating::new);
+
+        var response = new PagedApiResponse<>(
+                200,
+                ratingsDetails
+        );
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/user/{userId}")
