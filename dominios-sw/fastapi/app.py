@@ -35,7 +35,7 @@ async def process_average_recommendation(data: AverageRecommendation):
     recommended_movie_ids = [1, 3, 5, 7, 9, 11]
     return {"movieIds": recommended_movie_ids}
 
-@app.post("/genre")67
+@app.post("/genre")
 async def process_genre_recommendation(data: GenreRecommendation):
     recommended_movie_ids = [1, 3, 5, 7, 9, 11]
     return {"movieIds": recommended_movie_ids}
