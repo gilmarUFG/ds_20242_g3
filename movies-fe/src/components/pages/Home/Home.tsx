@@ -3,6 +3,7 @@ import { FilmCard } from '../../molecules/FilmCard';
 import DetailsModal from '../../molecules/DetailsModal';
 import { useState } from 'react';
 import { Film } from '../../molecules/DetailsModal/types';
+import { getMovies } from '../../../services/moviesService';
 
 export function Home() {
   const [open, setOpen] = useState(false);
@@ -59,9 +60,20 @@ export function Home() {
     setFilm(null);
   };
 
+  const [response, setResponse] = useState<any>(null);
+
+  const handleClickTest = async () => {
+    const response = await getMovies();
+    console.log(response);
+    setResponse(response);
+  };
+
   return (
     <Grid container spacing={6} className="container">
       <h1>Home Page</h1>
+      <button onClick={handleClickTest}>Click me</button>
+      {response &&
+        response.map((item: any) => <div key={item.id}>{item.title}</div>)}
       <Grid
         container
         spacing={3}
