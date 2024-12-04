@@ -62,7 +62,12 @@ export function Home() {
 
   const [response, setResponse] = useState<any>(null);
 
+  const test = () => {
+    console.log(5);
+  };
+
   const handleClickTest = async () => {
+    console.log('click');
     const response = await getMovies();
     console.log(response);
     setResponse(response);
