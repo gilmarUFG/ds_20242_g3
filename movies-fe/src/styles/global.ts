@@ -100,4 +100,8 @@ export const GlobalStyle = createGlobalStyle`
         text-decoration: none;
         color: var(--white);
     }
+    
+    .menu-item {
+        color: var(--white);
+    }
 `;

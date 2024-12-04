@@ -17,15 +17,11 @@ export function NavBar() {
           <Box sx={{ gap: 10, display: 'flex', alignItems: 'center' }}>
             <Logo />
             <Grid2>
-              <NavLink
-                to={'/assista-ai'}
-                color={'info'}
-                className={({ isActive }) => (isActive ? 'active-link' : '')}
-              >
-                Filmes
+              <NavLink to={'/assista-ai'} color={'info'}>
+                <Button color="info"> Filmes</Button>
               </NavLink>
 
-              <NavLink to={'/recomendados'}>
+              <NavLink to={'/assista-ai/recomendados'}>
                 <Button color="info">Recomendados</Button>
               </NavLink>
 
