@@ -62,7 +62,12 @@ export function Home() {
 
   const [response, setResponse] = useState<any>(null);
 
+  const test = () => {
+    console.log(5);
+  };
+
   const handleClickTest = async () => {
+    console.log('click');
     const response = await getMovies();
     console.log(response);
     setResponse(response);
@@ -70,8 +75,8 @@ export function Home() {
 
   return (
     <Grid container spacing={6} className="container">
-      <h1>Home Page</h1>
-      <button onClick={handleClickTest}>Click me</button>
+      <h1 onClick={handleClickTest}>Home Page</h1>
+      <button onClick={test}>Click me</button>
       {response &&
         response.map((item: any) => <div key={item.id}>{item.title}</div>)}
       <Grid
