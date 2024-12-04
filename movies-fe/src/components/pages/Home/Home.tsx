@@ -70,7 +70,7 @@ export function Home() {
 
   return (
     <Grid container spacing={6} className="container">
-      <h1>Home Page</h1>
+      <h1 onClick={handleClickTest}>Home Page</h1>
       <button onClick={handleClickTest}>Click me</button>
       {response &&
         response.map((item: any) => <div key={item.id}>{item.title}</div>)}
