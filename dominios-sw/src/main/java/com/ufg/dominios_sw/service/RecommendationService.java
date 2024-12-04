@@ -29,17 +29,10 @@ public class RecommendationService {
     private String fastapiUrl;
 
 
-    public Page<Movie> getRecommendationsByAverage(Long userId, int page, int size) {
-        var user = userService.findById(userId);
-        var userRatings = user.getRatings();
-
-        var ratingCount = userRatings.size();
-        var averageRating = userRatings.stream().mapToDouble(Rating::getRating).average().orElse(0.0);
-
-        AverageRecommendation averageRecommendation = new AverageRecommendation(userId, ratingCount, averageRating);
+    public Page<Movie> getRecommendationsByKey(String movieKey, int page, int size) {
 
         String url = fastapiUrl + "/average";
-        ResponseEntity<MovieIdsResponse> response = restTemplate.postForEntity(url, averageRecommendation, MovieIdsResponse.class);
+        ResponseEntity<MovieIdsResponse> response = restTemplate.postForEntity(url, null, MovieIdsResponse.class);
 
         var movieIds = Objects.requireNonNull(response.getBody()).getMovieIds();
 

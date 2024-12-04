@@ -35,8 +35,9 @@ public class RatingService {
         return ratingRepository.findById(id).orElse(null);
     }
 
-    public List<Rating> findAll() {
-        return ratingRepository.findAll();
+    public Page<Rating> findAll(int page, int size) {
+        var pageable = PageRequest.of(page, size);
+        return ratingRepository.findAll(pageable);
     }
 
     public Page<Rating> findByUserId(Long userId, int page, int size) {

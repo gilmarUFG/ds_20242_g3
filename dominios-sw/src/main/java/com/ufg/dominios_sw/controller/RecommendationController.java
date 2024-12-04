@@ -1,8 +1,6 @@
 package com.ufg.dominios_sw.controller;
 
 import com.ufg.dominios_sw.dto.movie.MovieDetails;
-import com.ufg.dominios_sw.dto.recommendation.AverageRecommendation;
-import com.ufg.dominios_sw.dto.recommendation.GenreRecommendation;
 import com.ufg.dominios_sw.infra.PagedApiResponse;
 import com.ufg.dominios_sw.repository.RatingRepository;
 import com.ufg.dominios_sw.service.RecommendationService;
@@ -28,14 +26,14 @@ public class RecommendationController {
     private String fastapiUrl;
 
 
-    @GetMapping("/average/{userId}")
+    @GetMapping("/key/{movieKey}")
     public ResponseEntity<PagedApiResponse<MovieDetails>> getAverageRecommendation(
-            @PathVariable Long userId,
+            @PathVariable String movieKey,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
 
-        var moviesRecommendations = recommendationService.getRecommendationsByAverage(userId, page, size);
+        var moviesRecommendations = recommendationService.getRecommendationsByKey(movieKey, page, size);
         var moviesDetails = moviesRecommendations.map(MovieDetails::new);
 
         var response = new PagedApiResponse<>(
