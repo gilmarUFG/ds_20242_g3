@@ -35,14 +35,16 @@ export function NavBar() {
             <NavLink to={'/login'}>
               <Button color="info">Entrar</Button>
             </NavLink>
-            <Button
-              className={'button'}
-              variant={'outlined'}
-              sx={{ ml: 2 }}
-              color="inherit"
-            >
-              Cadastrar-se
-            </Button>
+            <NavLink to={'/assista-ai/usuario/cadastrar'}>
+              <Button
+                className={'button'}
+                variant={'outlined'}
+                sx={{ ml: 2 }}
+                color="inherit"
+              >
+                Cadastrar-se
+              </Button>
+            </NavLink>
 
             {/*<IconButton>*/}
             {/*  <AccountCircleIcon fontSize={'large'} sx={{ color: 'white' }} />*/}

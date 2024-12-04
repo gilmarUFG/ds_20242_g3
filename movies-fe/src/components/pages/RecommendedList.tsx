@@ -1,6 +1,6 @@
 import { Grid2 } from '@mui/material';
 import { FilmCard } from '../atomic/Card';
-import SearchBox from '../atomic/SearchBox';
+import SearchBox from '../atomic/SearchBox/SearchBox';
 
 export function RecommendedList() {
   const listFilm = [

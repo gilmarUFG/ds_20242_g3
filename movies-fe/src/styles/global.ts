@@ -104,4 +104,18 @@ export const GlobalStyle = createGlobalStyle`
     .menu-item {
         color: var(--white);
     }
+
+    .user-form-container {
+        background-color: var(--purpleh1);
+        max-width: 400px;
+        padding: 50px;
+        color: var(--white);
+        
+        
+    }
+    .control-field {
+        color: var(--white);
+        border-radius: 10px;
+        background-color: var(--white);
+    }
 `;
