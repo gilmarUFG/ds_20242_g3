@@ -1,9 +1,9 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/templates/Layout';
-import Home from '../components/pages/Home';
 import Login from '../components/pages/Login';
 import RecommendedList from '../components/pages/RecommendedList';
 import MovieView from '../components/pages/MovieView';
+import Home from '../components/pages/Home/Home';
 
 export const routes = createBrowserRouter([
   {
