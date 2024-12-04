@@ -32,7 +32,7 @@ services:
 
   fastapi:
     build:
-      context: ./fastapi
+      context: ../app
       dockerfile: Dockerfile
     container_name: fastapi_service
     ports:
