@@ -1,13 +1,17 @@
-import { Grid } from '@mui/material';
+import { Grid2, Pagination } from '@mui/material';
 import { FilmCard } from '../../molecules/FilmCard';
 import DetailsModal from '../../molecules/DetailsModal';
 import { useState } from 'react';
 import { Film } from '../../molecules/DetailsModal/types';
+import SearchBox from '../../atomic/SearchBox/SearchBox';
+import { log } from 'node:util';
 
 export function Home() {
   const [open, setOpen] = useState(false);
   const [film, setFilm] = useState<Film | null>(null);
-
+  const [genre, setGenres] = useState(0);
+  const [query, setQuery] = useState('');
+  const [page, setPage] = useState(0);
   // const listFilm = [
   //   'https://starwars-visualguide.com/assets/img/films/1.jpg',
   //   'https://starwars-visualguide.com/assets/img/films/2.jpg',
@@ -60,21 +64,42 @@ export function Home() {
   };
 
   return (
-    <Grid container spacing={6} className="container">
+    <Grid2 container spacing={6} className="container">
       <h1>Home Page</h1>
-      <Grid
+      <SearchBox
+        genre={genre}
+        query={query}
+        setQuery={setQuery}
+        setGenre={setGenres}
+      />
+
+      <Grid2
         container
         spacing={3}
-        sx={{ padding: 20, gap: 5, justifyContent: 'center', display: 'flex' }}
+        sx={{ padding: 10, gap: 5, justifyContent: 'center', display: 'flex' }}
       >
         {mockedData.map((item) => (
           <FilmCard src={item.logoUrl} onClick={() => handleClick(item)} />
         ))}
-      </Grid>
+      </Grid2>
       {open && film && (
         <DetailsModal onClose={handleClose} film={film} open={open} />
       )}
-    </Grid>
+
+      <Pagination
+        count={10}
+        page={page}
+        onChange={(event, value) => {
+          setPage(value);
+        }}
+        color={'primary'}
+        sx={{
+          '& .MuiPaginationItem-root': {
+            color: 'white', // Alterando a cor dos números para vermelho
+          },
+        }}
+      />
+    </Grid2>
   );
 }
 

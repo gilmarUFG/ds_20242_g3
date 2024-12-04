@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextField, Button, Box, Typography, Card } from '@mui/material';
-import { User } from './UserType';
+import { User } from './types';
 import { Controller, useForm } from 'react-hook-form';
 
 function UserForm() {
