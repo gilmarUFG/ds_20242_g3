@@ -1,6 +1,6 @@
 import { Grid2 } from '@mui/material';
 import { FilmCard } from '../atomic/Card';
-import SearchBox from '../atomic/SearchBox';
+import SearchBox from '../atomic/SearchBox/SearchBox';
 import { useNavigate } from 'react-router-dom';
 
 export function Home() {
@@ -17,8 +17,6 @@ export function Home() {
   return (
     <Grid2 container className="container">
       <h1>Filmes</h1>
-
-      <SearchBox />
 
       <Grid2
         container

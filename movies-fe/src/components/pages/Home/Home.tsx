@@ -1,19 +1,16 @@
-import { Grid } from '@mui/material';
+import { Grid2, Pagination } from '@mui/material';
 import { FilmCard } from '../../molecules/FilmCard';
 import DetailsModal from '../../molecules/DetailsModal';
 import { useState } from 'react';
 import { Film } from '../../molecules/DetailsModal/types';
-import { getMovies } from '../../../services/moviesService';
+import SearchBox from '../../atomic/SearchBox/SearchBox';
 
 export function Home() {
   const [open, setOpen] = useState(false);
   const [film, setFilm] = useState<Film | null>(null);
-
-  // const listFilm = [
-  //   'https://starwars-visualguide.com/assets/img/films/1.jpg',
-  //   'https://starwars-visualguide.com/assets/img/films/2.jpg',
-  //   'https://starwars-visualguide.com/assets/img/films/3.jpg',
-  // ];
+  const [genre, setGenres] = useState(0);
+  const [query, setQuery] = useState('');
+  const [page, setPage] = useState(1);
 
   const mockedData = [
     {
@@ -74,24 +71,42 @@ export function Home() {
   };
 
   return (
-    <Grid container spacing={6} className="container">
-      <h1 onClick={handleClickTest}>Home Page</h1>
-      <button onClick={handleClickTest}>Click me</button>
-      {response &&
-        response.map((item: any) => <div key={item.id}>{item.title}</div>)}
-      <Grid
+    <Grid2 container spacing={6} className="container">
+      <h1>Recomendados para você</h1>
+      <SearchBox
+        genre={genre}
+        query={query}
+        setQuery={setQuery}
+        setGenre={setGenres}
+      />
+
+      <Grid2
         container
         spacing={3}
-        sx={{ padding: 20, gap: 5, justifyContent: 'center', display: 'flex' }}
+        sx={{ gap: 5, justifyContent: 'center', display: 'flex' }}
       >
         {mockedData.map((item) => (
           <FilmCard src={item.logoUrl} onClick={() => handleClick(item)} />
         ))}
-      </Grid>
+      </Grid2>
       {open && film && (
         <DetailsModal onClose={handleClose} film={film} open={open} />
       )}
-    </Grid>
+
+      <Pagination
+        count={mockedData.length / 2}
+        page={page}
+        onChange={(event, value) => {
+          setPage(value);
+        }}
+        color={'primary'}
+        sx={{
+          '& .MuiPaginationItem-root': {
+            color: 'white',
+          },
+        }}
+      />
+    </Grid2>
   );
 }
 
