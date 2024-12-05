@@ -8,4 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface RatingRepository extends JpaRepository<Rating, Long> {
     Page<Rating> findByUserId(Long userId, Pageable pageable);
     Page<Rating> findByMovieId(Long movieId, Pageable pageable);
+    boolean existsByUserIdAndMovieId(Long userId, Long movieId);
 }

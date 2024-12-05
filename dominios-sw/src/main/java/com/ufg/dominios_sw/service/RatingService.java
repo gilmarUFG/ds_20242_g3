@@ -2,6 +2,7 @@ package com.ufg.dominios_sw.service;
 
 import com.ufg.dominios_sw.domain.Rating;
 import com.ufg.dominios_sw.dto.rating.AddRatingRequest;
+import com.ufg.dominios_sw.dto.rating.UpdateRatingRequest;
 import com.ufg.dominios_sw.repository.RatingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -56,5 +57,23 @@ public class RatingService {
 
     public Rating update(Rating rating) {
         return ratingRepository.save(rating);
+    }
+
+    public Rating updatePartial(Long id, UpdateRatingRequest updateRatingRequest) {
+        var rating = findById(id);
+
+        if(updateRatingRequest.comment() != null) {
+            rating.setComment(updateRatingRequest.comment());
+        }
+
+        if(updateRatingRequest.rating() != null) {
+            rating.setRating(updateRatingRequest.rating());
+        }
+
+        return ratingRepository.save(rating);
+    }
+
+    public boolean haveUserRatedMovie(Long userId, Long movieId) {
+        return ratingRepository.existsByUserIdAndMovieId(userId, movieId);
     }
 }

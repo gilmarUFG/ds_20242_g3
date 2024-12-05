@@ -16,6 +16,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -33,11 +36,17 @@ public class RecommendationService {
 
         var keyRecommendationRequest = new KeyRecommendation(movieKey, 25);
         String url = fastapiUrl + "/recommendations/content";
-        ResponseEntity<MovieIdsResponse> response = restTemplate.postForEntity(url, keyRecommendationRequest, MovieIdsResponse.class);
 
-        var movieIds = Objects.requireNonNull(response.getBody()).getMovieIds();
+        try {
+            ResponseEntity<MovieIdsResponse> response = restTemplate.postForEntity(url, keyRecommendationRequest, MovieIdsResponse.class);
 
-        return movieService.findAllByIds(movieIds, page, size);
+            var movieIds = Objects.requireNonNull(response.getBody()).getMovieIds();
+
+            return movieService.findAllByIds(movieIds, page, size);
+        } catch (Exception ex) {
+            System.out.println("Retornando todos os filmes");
+            return movieService.findAll(null, null, page, size);
+        }
     }
 
     public Page<Movie> getRecommendationsByGenre(Long userId, int page, int size) {
@@ -57,11 +66,17 @@ public class RecommendationService {
         avgPerGenre.put("top_k", 10);
 
         String url = fastapiUrl + "/recommendations/user";
-        ResponseEntity<MovieIdsResponse> response = restTemplate.postForEntity(url, avgPerGenre, MovieIdsResponse.class);
 
-        var movieIds = Objects.requireNonNull(response.getBody()).getMovieIds();
+        try {
+            ResponseEntity<MovieIdsResponse> response = restTemplate.postForEntity(url, avgPerGenre, MovieIdsResponse.class);
 
-        return movieService.findAllByIds(movieIds, page, size);
+            var movieIds = Objects.requireNonNull(response.getBody()).getMovieIds();
+
+            return movieService.findAllByIds(movieIds, page, size);
+        } catch (Exception ex) {
+            System.out.println("Retornando todos os filmes");
+            return movieService.findAll(null,null, page, size);
+        }
     }
 
     private static Map<String, Long> genreMap() {

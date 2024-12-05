@@ -18,6 +18,19 @@ public interface MoviesRepository extends JpaRepository<Movie, Long> {
             nativeQuery = true)
     Page<Movie> findMoviesByGenreIdNative(@Param("genreId") Long genreId, Pageable pageable);
 
+    @Query(value = "SELECT m.* FROM movies m " +
+            "LEFT JOIN movie_genres mg ON m.id = mg.movie_id " +
+            "WHERE (:genreId IS NULL OR mg.genre_id = :genreId) " +
+            "AND (:title IS NULL OR m.original_title ILIKE %:title%)",
+            countQuery = "SELECT COUNT(*) FROM movies m " +
+                    "LEFT JOIN movie_genres mg ON m.id = mg.movie_id " +
+                    "WHERE (:genreId IS NULL OR mg.genre_id = :genreId) " +
+                    "AND (:title IS NULL OR m.original_title ILIKE %:title%)",
+            nativeQuery = true)
+    Page<Movie> findMoviesByGenreIdAndTitleNative(@Param("genreId") Long genreId,
+                                                  @Param("title") String title,
+                                                  Pageable pageable);
+
     @Query(value = "SELECT m.* FROM movies m WHERE m.id IN :ids",
             countQuery = "SELECT COUNT(*) FROM movies m WHERE m.id IN :ids",
             nativeQuery = true)

@@ -20,9 +20,10 @@ public class MovieController {
     public ResponseEntity<PagedApiResponse<MovieDetails>> findAll(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
-            @RequestParam(name = "genreId", required = false) Long genreId
+            @RequestParam(name = "genreId", required = false) Long genreId,
+            @RequestParam(name = "title", required = false) String title
     ) {
-        var movies = movieService.findAll(genreId, page, pageSize);
+        var movies = movieService.findAll(genreId, title, page, pageSize);
         var movieDetailsPage = movies.map(MovieDetails::new);
 
         var response = new PagedApiResponse<>(

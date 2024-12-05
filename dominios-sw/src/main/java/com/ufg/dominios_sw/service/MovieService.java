@@ -20,9 +20,9 @@ public class MovieService {
                 .orElseThrow(() -> new RuntimeException("Movie not found with id: " + id));
     }
 
-    public Page<Movie> findAll(Long genreId, int page, int size) {
+    public Page<Movie> findAll(Long genreId, String originalTitle, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return movieRepository.findMoviesByGenreIdNative(genreId, pageable);
+        return movieRepository.findMoviesByGenreIdAndTitleNative(genreId, originalTitle, pageable);
     }
 
     public Page<Movie> findAllByIds(List<Long> ids, int page, int size) {
