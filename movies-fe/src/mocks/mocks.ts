@@ -1,6 +1,6 @@
 export const oneMovie = {
   id: 101,
-  title: 'A Jornada Épica',
+  title: 'Jumanji',
   overview:
     'Um grupo de heróis improváveis embarca em uma missão para salvar seu reino das forças sombrias.',
   genres: [
@@ -17,7 +17,7 @@ export const oneMovie = {
       name: 'Fantasia',
     },
   ],
-  posterPath: '/images/posters/jornada-epica.jpg',
+  posterPath: 'https://image.tmdb.org/t/p/w342/vgpXmVaVyUL7GGiDeiK1mKEKzcX.jpg',
   voteAverage: 8.5,
   voteCount: 1500,
 };
