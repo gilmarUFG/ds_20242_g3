@@ -22,6 +22,10 @@ public class MovieService {
 
     public Page<Movie> findAll(Long genreId, String originalTitle, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
+
+        if(genreId == null && originalTitle == null) {
+            return movieRepository.findAll(pageable);
+        }
         return movieRepository.findMoviesByGenreIdAndTitleNative(genreId, originalTitle, pageable);
     }
 
