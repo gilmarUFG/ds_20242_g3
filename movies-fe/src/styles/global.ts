@@ -8,7 +8,7 @@ export const GlobalStyle = createGlobalStyle`
         --purpleh1: #312257;
         --white: #f3f5f7;
         --light: #31213e;
-        --dark: #070325;
+        --dark: rgb(32, 26, 76);
         --primary: #13114a;
 
     }
@@ -61,12 +61,12 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     .nav-bar {
-        background: var(--background);
+        background: linear-gradient(135deg, #31213e 0%, #191249 50%, #070325 100%);
         margin-bottom: 50px;
     }
 
     .container {
-        padding: 50px;
+        padding: 20px;
         display: flex;
         justify-content: center;
         flex-direction: column;
@@ -100,7 +100,7 @@ export const GlobalStyle = createGlobalStyle`
         text-decoration: none;
         color: var(--white);
     }
-    
+
     .menu-item {
         color: var(--white);
     }
@@ -110,9 +110,10 @@ export const GlobalStyle = createGlobalStyle`
         max-width: 400px;
         padding: 50px;
         color: var(--white);
-        
-        
+
+
     }
+
     .control-field {
         color: var(--white);
         border-radius: 10px;

@@ -11,7 +11,7 @@ export function Home() {
   const [film, setFilm] = useState<Film | null>(null);
   const [genre, setGenres] = useState(0);
   const [query, setQuery] = useState('');
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   // const listFilm = [
   //   'https://starwars-visualguide.com/assets/img/films/1.jpg',
   //   'https://starwars-visualguide.com/assets/img/films/2.jpg',
@@ -65,7 +65,7 @@ export function Home() {
 
   return (
     <Grid2 container spacing={6} className="container">
-      <h1>Home Page</h1>
+      <h1>Recomendados para você</h1>
       <SearchBox
         genre={genre}
         query={query}
@@ -76,7 +76,7 @@ export function Home() {
       <Grid2
         container
         spacing={3}
-        sx={{ padding: 10, gap: 5, justifyContent: 'center', display: 'flex' }}
+        sx={{ gap: 5, justifyContent: 'center', display: 'flex' }}
       >
         {mockedData.map((item) => (
           <FilmCard src={item.logoUrl} onClick={() => handleClick(item)} />
