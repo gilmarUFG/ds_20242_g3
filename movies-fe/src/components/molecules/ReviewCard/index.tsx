@@ -1,10 +1,15 @@
 import React from 'react';
-import { Card, CardContent, Typography, Rating, Grid2 } from '@mui/material';
-import styled from 'styled-components';
+import { Typography, Rating, Grid2 } from '@mui/material';
 import { CardContainer, ReviewContent } from './styles';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { format } from 'date-fns';
 
 const ReviewCard = ({ review }: { review: any }) => {
+  function formatDate(dateString: string): string {
+    const date = new Date(dateString);
+
+    return format(date, 'dd/MM/yyyy');
+  }
   return (
     <CardContainer>
       <ReviewContent>
@@ -13,14 +18,14 @@ const ReviewCard = ({ review }: { review: any }) => {
           alignItems={'center'}
           justifyContent={'space-between'}
         >
-          <Grid2 display={'flex'} alignItems={'center'} sx={{ gap: 2 }}>
+          <Grid2 display={'flex'} alignItems={'center'} sx={{ gap: 1 }}>
             <AccountCircleIcon />
-            <Typography variant="h6">{review.username}</Typography>
+            <Typography variant="h6">{review.user.username}</Typography>
           </Grid2>
-
-          <Rating name="read-only" value={review.rating} readOnly />
+          <p>{formatDate(review.date)}</p>
         </Grid2>
 
+        <Rating name="read-only" value={review.rating} readOnly />
         <Typography variant="body2" color="info">
           {review.comment}
         </Typography>
