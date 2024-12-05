@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 import { Button, DialogContent, Grid2, TextField } from '@mui/material';
-import Rating from '@mui/material/Rating';
 
 export const DialogContainer = styled(DialogContent)`
-    background-color: rgb(22, 18, 57);
+    background: linear-gradient(135deg, #31213e,#191249,  #070325) !important;
+
 );
 `;
 export const StyledDialogTitle = styled(Grid2)`
-  background-color: var(--dark);
+    background: linear-gradient(135deg, #31213e,#191249,  #070325) !important;
   );
 `;
 
