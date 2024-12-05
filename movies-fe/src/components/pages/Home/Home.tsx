@@ -4,7 +4,6 @@ import DetailsModal from '../../molecules/DetailsModal';
 import { useState } from 'react';
 import { Film } from '../../molecules/DetailsModal/types';
 import SearchBox from '../../atomic/SearchBox/SearchBox';
-import { log } from 'node:util';
 
 export function Home() {
   const [open, setOpen] = useState(false);
@@ -12,11 +11,6 @@ export function Home() {
   const [genre, setGenres] = useState(0);
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
-  // const listFilm = [
-  //   'https://starwars-visualguide.com/assets/img/films/1.jpg',
-  //   'https://starwars-visualguide.com/assets/img/films/2.jpg',
-  //   'https://starwars-visualguide.com/assets/img/films/3.jpg',
-  // ];
 
   const mockedData = [
     {
@@ -87,7 +81,7 @@ export function Home() {
       )}
 
       <Pagination
-        count={10}
+        count={mockedData.length / 2}
         page={page}
         onChange={(event, value) => {
           setPage(value);
@@ -95,7 +89,7 @@ export function Home() {
         color={'primary'}
         sx={{
           '& .MuiPaginationItem-root': {
-            color: 'white', // Alterando a cor dos números para vermelho
+            color: 'white',
           },
         }}
       />

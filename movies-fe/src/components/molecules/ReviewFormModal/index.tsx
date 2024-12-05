@@ -42,7 +42,9 @@ const AddReviewFormModal = ({ open, setOpen }: ReviewFormModalProps) => {
         justifyContent={'space-between'}
       >
         <DialogTitle>Adicionar Avaliação</DialogTitle>
-        <Button onClick={handleClose}>X</Button>
+        <Button onClick={handleClose} color={'info'}>
+          X
+        </Button>
       </StyledDialogTitle>
 
       <DialogContainer sx={{ marginTop: 0 }}>
