@@ -1,12 +1,18 @@
 import { Button, MenuItem, Select, TextField } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { SearchBoxProps } from './types';
+import { useEffect, useState } from 'react';
+import { getGenres, searchMovies } from '../../../services/moviesService';
+import { Genre } from '../../../services/types';
 
 function SearchBox({ genre, setGenre, setQuery, query }: SearchBoxProps) {
-  const mockGnere = [
-    { id: 9, name: 'action' },
-    { id: 10, name: 'romance' },
-  ];
+  const [genres, setGenres] = useState<Genre[]>([]);
+
+  useEffect(() => {
+    getGenres().then((response) => {
+      setGenres(response.data);
+    });
+  }, []);
 
   return (
     <div
@@ -19,7 +25,7 @@ function SearchBox({ genre, setGenre, setQuery, query }: SearchBoxProps) {
       }}
     >
       <Select
-        sx={{ width: 150, background: 'white' }}
+        sx={{ width: 150, background: 'white', color: 'black' }}
         size={'small'}
         value={genre}
         placeholder={'Gêneros'}
@@ -28,8 +34,8 @@ function SearchBox({ genre, setGenre, setQuery, query }: SearchBoxProps) {
         <MenuItem value="">
           <em>--</em>
         </MenuItem>
-        {mockGnere.map((item) => (
-          <MenuItem color={'text.secondary'} value={item.id}>
+        {genres.map((item) => (
+          <MenuItem color={'text.primary'} value={item.id}>
             {item.name}
           </MenuItem>
         ))}
@@ -38,7 +44,12 @@ function SearchBox({ genre, setGenre, setQuery, query }: SearchBoxProps) {
       <TextField
         size={'small'}
         onChange={(e) => setQuery(e.target.value)}
-        sx={{ background: 'white', borderRadius: 2, width: '30%' }}
+        sx={{
+          background: 'white',
+          borderRadius: 2,
+          width: '30%',
+          color: 'black',
+        }}
       ></TextField>
       <Button variant={'contained'}>
         <SearchIcon />
