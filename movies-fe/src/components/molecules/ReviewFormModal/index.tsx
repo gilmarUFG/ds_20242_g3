@@ -7,13 +7,20 @@ import {
   SubmitButton,
 } from './style';
 import { ReviewFormModalProps } from './types';
+import { postRating } from '../../../services/moviesService';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 const AddReviewFormModal = ({ open, setOpen }: ReviewFormModalProps) => {
   const [rating, setRating] = useState<number | null>(1);
   const [comment, setComment] = useState<string>('');
   const [error, setError] = useState<string>('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [searchParams] = useSearchParams();
+  const userId = searchParams.get('userId');
+
+  let { id: movieId } = useParams<{ id: string }>();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (rating === null || comment.trim() === '') {
@@ -27,8 +34,12 @@ const AddReviewFormModal = ({ open, setOpen }: ReviewFormModalProps) => {
     }
 
     setError('');
-    console.log('Comentário:', comment);
-    console.log('Avaliação:', rating);
+    try {
+      await postRating(Number(movieId), Number(userId), rating, comment);
+      setOpen(false);
+    } catch (error) {
+      setError('Erro ao enviar avaliação.');
+    }
   };
 
   const handleClose = () => {

@@ -1,8 +1,11 @@
 import { Button, Card, CardActions, CardContent, Grid2 } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { FilmCardProps } from './types';
 
 export function FilmCard({ film, onClick }: FilmCardProps) {
+  const [searchParams] = useSearchParams();
+  const userId = searchParams.get('userId');
+
   const onReviewClick = () => {
     localStorage.setItem('selectedFilm', JSON.stringify(film));
   };
@@ -19,7 +22,7 @@ export function FilmCard({ film, onClick }: FilmCardProps) {
         />
       </CardContent>
       <CardActions sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Link to={'/assista-ai/filme/' + film.id}>
+        <Link to={`/assista-ai/filme/${film.id}?userId=${userId}`}>
           <Button
             variant={'outlined'}
             color={'info'}

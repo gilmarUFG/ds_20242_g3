@@ -57,3 +57,19 @@ export const getGenres = async () => {
   });
   return response.data;
 };
+
+export const postRating = async (
+  movieId: number,
+  userId: number,
+  rating: number,
+  comment: string
+) => {
+  await api.post('/ratings', {
+    movieId,
+    userId,
+    rating,
+    comment,
+  });
+
+  return;
+};
