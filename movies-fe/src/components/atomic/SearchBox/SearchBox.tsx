@@ -35,7 +35,7 @@ function SearchBox({ genre, setGenre, setQuery, query }: SearchBoxProps) {
           <em>--</em>
         </MenuItem>
         {genres.map((item) => (
-          <MenuItem color={'text.primary'} value={item.id}>
+          <MenuItem sx={{ color: 'black' }} value={item.id}>
             {item.name}
           </MenuItem>
         ))}
@@ -43,6 +43,11 @@ function SearchBox({ genre, setGenre, setQuery, query }: SearchBoxProps) {
 
       <TextField
         size={'small'}
+        slotProps={{
+          htmlInput: {
+            style: { color: 'black' }, // Defina a cor desejada
+          },
+        }}
         onChange={(e) => setQuery(e.target.value)}
         sx={{
           background: 'white',
