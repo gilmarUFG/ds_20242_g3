@@ -1,0 +1,41 @@
+@startuml
+class Genre {
+        Long id
+        String name
+        Set<Movie> movies
+    }
+
+    class Movie {
+        Long id
+        String imdbId
+        String originalTitle
+        String overview
+        Set<Genre> genres
+        String posterPath
+        double voteAverage
+        int voteCount
+        List<Rating> ratings
+    }
+
+    class Rating {
+        Long id
+        User user
+        Movie movie
+        String comment
+        double rating
+        Timestamp timestamp
+    }
+
+    class User {
+        Long id
+        String name
+        int age
+        String email
+        String password
+        List<Rating> ratings
+    }
+
+    Genre "1..*" -- "0..*" Movie
+    Movie "1" *-- "0..*" Rating 
+    User "1" *-- "0..*" Rating
+@enduml

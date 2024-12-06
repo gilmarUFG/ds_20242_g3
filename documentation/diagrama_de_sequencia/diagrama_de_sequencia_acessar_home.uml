@@ -1,0 +1,34 @@
+@startuml
+!theme aws-orange
+actor Usuario
+boundary Frontend
+control Backend
+entity "API (IA)" as IA
+
+Usuario -> Frontend: Acessar o site
+activate Frontend
+Frontend -> Backend: Verificar sessão do usuário
+activate Backend
+Backend --> Frontend: Sessão válida
+deactivate Backend
+
+Frontend -> Backend: Requisitar dados da Home
+activate Backend
+alt Primeiro acesso do usuário
+    Backend -> IA: Solicitar lista de filmes aleatória
+    activate IA
+    IA --> Backend: Lista de filmes aleatórios
+    deactivate IA
+    Backend --> Frontend: Dados da Home (lista de filmes)
+else Demais acessos
+    Backend -> IA: Solicitar lista de filmes baseada em avaliações
+    activate IA
+    IA --> Backend: Lista de filmes recomendados
+    deactivate IA
+    Backend --> Frontend: Dados da Home (lista de filmes)
+end
+deactivate Backend
+
+Frontend -> Usuario: Mostrar lista de filmes na Home
+deactivate Frontend
+@enduml
