@@ -1,30 +1,46 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Container, Grid2 } from '@mui/material';
 import PaginationComponent from '../../atomic/PaginationComponent/PaginationComponent';
 import AddIcon from '@mui/icons-material/Add';
 import ReviewCard from '../ReviewCard';
 import AddReviewFormModal from '../ReviewFormModal';
-import { MovieReviewsListProps } from './types';
-import { getUserAlreadyRated } from '../../../services/moviesService';
+import {
+  getRatingByMovieId,
+  getUserAlreadyRated,
+} from '../../../services/moviesService';
 import { useParams, useSearchParams } from 'react-router-dom';
+import { RatingById } from '../../../services/types';
 
-const reviewsPerPage = 2;
+const reviewsPerPage = 4;
 
-function MovieReviewsList({ reviews }: MovieReviewsListProps) {
-  const [currentPage, setCurrentPage] = useState(1);
+function MovieReviewsList() {
   const [open, setOpen] = useState<boolean>(false);
   const [userAlreadyReviewed, setUserAlreadyReviewed] = useState<boolean>(true);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [reviews, setReviews] = useState<RatingById[]>([]);
 
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
-  const indexOfLastReview = currentPage * reviewsPerPage;
-  const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
-  const currentReviews = reviews.slice(indexOfFirstReview, indexOfLastReview);
+  const paginate = (pageNumber: number) => getRating(pageNumber);
 
   const [searchParams] = useSearchParams();
   const userId = searchParams.get('userId');
 
   let { id: movieId } = useParams<{ id: string }>();
+
+  const getRating = useCallback(
+    async (page = 1) => {
+      getRatingByMovieId(Number(movieId), page - 1).then((response) => {
+        console.log(response.data);
+        setReviews(response.data);
+        setTotalPages(response.pagination.totalPages);
+        console.log('chamou');
+      });
+    },
+    [movieId]
+  );
+
+  useEffect(() => {
+    getRating();
+  }, [getRating]);
 
   useEffect(() => {
     getUserAlreadyRated(Number(movieId), Number(userId)).then((response) => {
@@ -59,14 +75,14 @@ function MovieReviewsList({ reviews }: MovieReviewsListProps) {
         alignItems="center"
         justifyContent="center"
       >
-        {currentReviews.map((review) => (
+        {reviews.map((review) => (
           <Grid2 key={review.id}>
             <ReviewCard review={review} />
           </Grid2>
         ))}
       </Grid2>
       <PaginationComponent
-        totalReviews={reviews.length}
+        totalReviews={totalPages}
         reviewsPerPage={reviewsPerPage}
         onPageChange={paginate}
       />

@@ -4,24 +4,17 @@ import React, { useEffect, useState } from 'react';
 import { Grid2, IconButton } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
-import { getRatingByMovieId } from '../../../services/moviesService';
 import { Film } from '../../molecules/DetailsModal/types';
-import { RatingById } from '../../../services/types';
 
 function MovieView() {
   const [searchParams] = useSearchParams();
   const userId = searchParams.get('userId');
 
-  let { id } = useParams();
   const [selectedFilm, setSelectedFilm] = useState<Film>();
-  const [ratings, setRatings] = useState<RatingById[]>([]);
 
   useEffect(() => {
-    getRatingByMovieId(Number(id)).then((response) => {
-      setRatings(response.data);
-      setSelectedFilm(JSON.parse(localStorage.getItem('selectedFilm') || '{}'));
-    });
-  }, [id]);
+    setSelectedFilm(JSON.parse(localStorage.getItem('selectedFilm') || '{}'));
+  }, []);
 
   if (selectedFilm === undefined) {
     return <h1>Carregando...</h1>;
@@ -65,7 +58,7 @@ function MovieView() {
         </Grid2>
       </S.Content>
 
-      <MovieReviewsList reviews={ratings} />
+      <MovieReviewsList />
     </Grid2>
   );
 }
