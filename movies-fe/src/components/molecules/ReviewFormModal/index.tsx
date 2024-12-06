@@ -37,6 +37,7 @@ const AddReviewFormModal = ({ open, setOpen }: ReviewFormModalProps) => {
     try {
       await postRating(Number(movieId), Number(userId), rating, comment);
       setOpen(false);
+      window.location.reload();
     } catch (error) {
       setError('Erro ao enviar avaliação.');
     }
