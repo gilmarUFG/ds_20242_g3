@@ -35,7 +35,7 @@ class Genre {
         List<Rating> ratings
     }
 
-    Genre "1" -- "0..*" Movie
+    Genre "1..*" -- "0..*" Movie
     Movie "1" *-- "0..*" Rating 
     User "1" *-- "0..*" Rating
 @enduml

@@ -1,0 +1,42 @@
+@startuml
+!theme aws-orange
+actor Usuario
+boundary Frontend
+control Backend
+entity "API (IA)" as IA
+
+Usuario -> Frontend: Acessar o site
+activate Frontend
+Frontend -> Backend: Verificar sessão do usuário
+activate Backend
+Backend --> Frontend: Sessão válida
+deactivate Backend
+
+Frontend -> Backend: Requisitar dados da Home
+activate Backend
+Backend --> Frontend: Dados da Home
+deactivate Backend
+
+Frontend -> Usuario: Mostrar a Home
+deactivate Frontend
+
+Usuario -> Frontend: Clicar no campo de busca
+activate Frontend
+Usuario -> Frontend: Procurar por um filme (termo de busca)
+Frontend -> Backend: Requisitar busca pelo termo
+activate Backend
+Backend -> Backend: Verificar termo no banco de dados
+alt Filme encontrado
+    Backend -> IA: Solicitar filmes relacionados ao filme encontrado
+    activate IA
+    IA --> Backend: Lista de filmes relacionados
+    deactivate IA
+    Backend --> Frontend: Dados do filme + lista de filmes relacionados
+    Frontend -> Usuario: Mostrar o filme e a lista de relacionados
+else Filme não encontrado
+    Backend --> Frontend: Retornar mensagem "Filme não encontrado"
+    Frontend -> Usuario: Exibir mensagem de erro
+end
+deactivate Backend
+deactivate Frontend
+@enduml
