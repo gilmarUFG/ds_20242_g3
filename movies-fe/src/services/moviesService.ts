@@ -1,8 +1,18 @@
 import { api } from './api';
 import { Response, Movie, Rating, RatingById, Genre } from './types';
 
-export const getMovies = async () => {
-  const response = await api.get<Response<Movie[]>>('/movies');
+export const searchMovies = async (
+  page: number,
+  genreId?: number,
+  title?: string
+) => {
+  const response = await api.get<Response<Movie[]>>('/movies', {
+    params: {
+      page,
+      genreId,
+      title,
+    },
+  });
   return response.data;
 };
 
@@ -39,13 +49,6 @@ export const getRecommendations = async (userId: number, page: number) => {
   return response.data;
 };
 
-export const searchMovies = async (query: string) => {
-  const response = await api.get<Response<Movie[]>>(
-    `/recommendations/key/${query}`
-  );
-  return response.data;
-};
-
 export const getGenres = async () => {
   const response = await api.get<Response<Genre[]>>('/genres', {
     params: {
@@ -53,4 +56,20 @@ export const getGenres = async () => {
     },
   });
   return response.data;
+};
+
+export const postRating = async (
+  movieId: number,
+  userId: number,
+  rating: number,
+  comment: string
+) => {
+  await api.post('/ratings', {
+    movieId,
+    userId,
+    rating,
+    comment,
+  });
+
+  return;
 };

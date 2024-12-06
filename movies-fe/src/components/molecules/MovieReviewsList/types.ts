@@ -1,13 +1,5 @@
-export interface Review {
-  id?: number;
-  comment: string;
-  movieId?: number;
-  date: Date | string;
-  rating: number;
-  user: User;
-}
+import { RatingById } from '../../../services/types';
 
-export interface User {
-  id?: number;
-  username: string;
+export interface MovieReviewsListProps {
+  reviews: RatingById[];
 }

@@ -2,10 +2,16 @@ import { Button, MenuItem, Select, TextField } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { SearchBoxProps } from './types';
 import { useEffect, useState } from 'react';
-import { getGenres, searchMovies } from '../../../services/moviesService';
+import { getGenres } from '../../../services/moviesService';
 import { Genre } from '../../../services/types';
 
-function SearchBox({ genre, setGenre, setQuery, query }: SearchBoxProps) {
+function SearchBox({
+  query,
+  setQuery,
+  genre,
+  setGenre,
+  handleSearch,
+}: SearchBoxProps) {
   const [genres, setGenres] = useState<Genre[]>([]);
 
   useEffect(() => {
@@ -56,7 +62,7 @@ function SearchBox({ genre, setGenre, setQuery, query }: SearchBoxProps) {
           color: 'black',
         }}
       ></TextField>
-      <Button variant={'contained'}>
+      <Button variant={'contained'} onClick={() => handleSearch()}>
         <SearchIcon />
       </Button>
     </div>

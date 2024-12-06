@@ -4,6 +4,7 @@ import { ThemeProvider } from 'styled-components';
 import { NavBar } from './components/templates/NavBar';
 import { fontSizes } from './styles/fontSize';
 import { colors } from './styles/colors';
+import { MoviesProvider } from './context';
 
 export function App() {
   interface ThemeInterface {
@@ -17,11 +18,13 @@ export function App() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <NavBar />
-      <ComponentRoutes />
-    </ThemeProvider>
+    <MoviesProvider>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <NavBar />
+        <ComponentRoutes />
+      </ThemeProvider>
+    </MoviesProvider>
   );
 }
 

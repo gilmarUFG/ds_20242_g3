@@ -3,6 +3,7 @@ import { Movie } from '../services/types';
 
 export const movieFormatter = (movies: Movie[]): Film[] => {
   return movies.map((item) => ({
+    id: item.id,
     title: item.title,
     description: item.overview,
     classification: '18+',
