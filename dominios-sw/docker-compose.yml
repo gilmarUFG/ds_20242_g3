@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   postgres:
-    image: amadeulee/postgres-filmesdb:v1.0.5
+    image: amadeulee/postgres-filmesdb:v1.0.7
     container_name: postgres_filmesdb
     environment:
       POSTGRES_USER: filmes_user

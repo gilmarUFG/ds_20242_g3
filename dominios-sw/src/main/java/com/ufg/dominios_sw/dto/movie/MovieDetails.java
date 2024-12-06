@@ -4,6 +4,7 @@ import com.ufg.dominios_sw.domain.Genre;
 import com.ufg.dominios_sw.domain.Movie;
 import com.ufg.dominios_sw.dto.genre.GenreDetails;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -15,10 +16,11 @@ public record MovieDetails(
         List<GenreDetails> genres,
         String posterPath,
         Double voteAverage,
-        Integer voteCount
+        Integer voteCount,
+        LocalDate releaseDate
 ) {
     public MovieDetails(Movie movie) {
-        this(movie.getId(), movie.getOriginalTitle(), movie.getOverview(), movie.getGenres().stream().map(GenreDetails::new).collect(Collectors.toList()), movie.getPosterPath(), movie.getVoteAverage(), movie.getVoteCount());
+        this(movie.getId(), movie.getOriginalTitle(), movie.getOverview(), movie.getGenres().stream().map(GenreDetails::new).collect(Collectors.toList()), movie.getPosterPath(), movie.getVoteAverage(), movie.getVoteCount(), movie.getReleaseDate());
     }
 
 }
