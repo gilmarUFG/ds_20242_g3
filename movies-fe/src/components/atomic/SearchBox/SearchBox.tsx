@@ -6,7 +6,6 @@ import { getGenres } from '../../../services/moviesService';
 import { Genre } from '../../../services/types';
 
 function SearchBox({
-  query,
   setQuery,
   genre,
   setGenre,
@@ -16,7 +15,7 @@ function SearchBox({
 
   useEffect(() => {
     getGenres().then((response) => {
-      setGenres(response.data);
+      setGenres([{ id: 0, name: 'Todos' }, ...response.data]);
     });
   }, []);
 
@@ -35,6 +34,7 @@ function SearchBox({
         size={'small'}
         value={genre}
         placeholder={'Gêneros'}
+        label="Gêneros"
         onChange={(event) => setGenre(event.target.value)}
       >
         <MenuItem value="">
@@ -49,6 +49,7 @@ function SearchBox({
 
       <TextField
         size={'small'}
+        placeholder="Pesquisar por título"
         slotProps={{
           htmlInput: {
             style: { color: 'black' }, // Defina a cor desejada
