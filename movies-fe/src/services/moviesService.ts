@@ -73,3 +73,10 @@ export const postRating = async (
 
   return;
 };
+
+export const getUserAlreadyRated = async (movieId: number, userId: number) => {
+  const response = await api.get<boolean>(
+    `/ratings/user/${userId}/movie/${movieId}`
+  );
+  return response.data;
+};
