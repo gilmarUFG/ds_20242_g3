@@ -34,7 +34,7 @@ public class RecommendationService {
 
     public Page<Movie> getRecommendationsByKey(String movieKey, int page, int size) {
 
-        var keyRecommendationRequest = new KeyRecommendation(movieKey, 25);
+        var keyRecommendationRequest = new KeyRecommendation(movieKey, 100);
         String url = fastapiUrl + "/recommendations/content";
 
         try {
@@ -63,7 +63,7 @@ public class RecommendationService {
         avgPerGenre.put("new_rating_count", ratingCount);
         avgPerGenre.put("new_rating_ave", averageRating);
         avgPerGenre.put("new_childrens", 0.0);
-        avgPerGenre.put("top_k", 10);
+        avgPerGenre.put("top_k", 100);
 
         String url = fastapiUrl + "/recommendations/user";
 
