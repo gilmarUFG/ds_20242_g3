@@ -3,15 +3,12 @@ import { Pagination } from '@mui/material';
 import { PaginationComponentOptions } from './types';
 
 const PaginationComponent = ({
-  totalReviews,
-  reviewsPerPage,
+  totalPages,
   onPageChange,
 }: PaginationComponentOptions) => {
-  const pageCount = Math.ceil(totalReviews / reviewsPerPage);
-
   return (
     <Pagination
-      count={pageCount}
+      count={totalPages}
       onChange={(event, page) => onPageChange(page)}
       color="primary"
       sx={{
