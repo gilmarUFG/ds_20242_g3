@@ -30,9 +30,15 @@ export const getRating = async (id: string) => {
   return response.data;
 };
 
-export const getRatingByMovieId = async (movieId: number) => {
+export const getRatingByMovieId = async (movieId: number, page: number) => {
   const response = await api.get<Response<RatingById[]>>(
-    `/ratings/movie/${movieId}`
+    `/ratings/movie/${movieId}`,
+    {
+      params: {
+        page,
+        size: 4,
+      },
+    }
   );
   return response.data;
 };
