@@ -57,7 +57,6 @@ export function Home() {
   };
 
   const handleSearch = async (page = 1) => {
-    console.log(page);
     const response = await searchMovies(
       page - 1,
       genre === 0 ? undefined : genre,
@@ -72,7 +71,6 @@ export function Home() {
       <SearchBox
         genre={genre}
         handleSearch={handleSearch}
-        query={query}
         setQuery={setQuery}
         setGenre={setGenres}
       />
