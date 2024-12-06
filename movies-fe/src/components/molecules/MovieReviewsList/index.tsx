@@ -4,42 +4,11 @@ import PaginationComponent from '../../atomic/PaginationComponent/PaginationComp
 import AddIcon from '@mui/icons-material/Add';
 import ReviewCard from '../ReviewCard';
 import AddReviewFormModal from '../ReviewFormModal';
-import { Review } from './types';
-
-const reviews: Review[] = [
-  {
-    id: 1,
-    user: { username: 'João' },
-    rating: 4,
-    comment: 'Muito bom, gostei da história.',
-    date: '2024-12-05T14:45:30.123',
-  },
-  {
-    id: 2,
-    user: { username: 'Maria' },
-    rating: 3,
-    comment: 'O filme é interessante, mas poderia ser melhor.',
-    date: '2024-12-05T14:45:30.123',
-  },
-  {
-    id: 3,
-    user: { username: 'Carlos' },
-    rating: 5,
-    comment: 'Excelente! Muito bem feito.',
-    date: '2024-12-05T14:45:30.123',
-  },
-  {
-    id: 4,
-    user: { username: 'Ana' },
-    rating: 2,
-    comment: 'Acho que esperava mais, me decepcionou.',
-    date: '2024-12-05T14:45:30.123',
-  },
-];
+import { MovieReviewsListProps } from './types';
 
 const reviewsPerPage = 2;
 
-function MovieReviewsList() {
+function MovieReviewsList({ reviews }: MovieReviewsListProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [open, setOpen] = useState<boolean>(false);
 

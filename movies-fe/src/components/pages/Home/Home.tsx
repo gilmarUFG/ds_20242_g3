@@ -14,11 +14,11 @@ import { Movie, Response } from '../../../services/types';
 
 export function Home() {
   const [open, setOpen] = useState(false);
-  const [selectedFilm, setSelectedFilm] = useState<Film | null>(null);
   const [genre, setGenres] = useState(0);
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const [selectedFilm, setSelectedFilm] = useState<Film | null>(null);
 
   const [films, setFilms] = useState<Film[]>([]);
 
@@ -83,7 +83,7 @@ export function Home() {
         sx={{ gap: 5, justifyContent: 'center', display: 'flex' }}
       >
         {films.map((film) => (
-          <FilmCard src={film.logoUrl} onClick={() => handleClick(film)} />
+          <FilmCard film={film} onClick={handleClick} />
         ))}
       </Grid2>
       {open && selectedFilm && (

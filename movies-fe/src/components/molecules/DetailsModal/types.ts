@@ -5,6 +5,7 @@ export interface DetailsModalProps {
 }
 
 export interface Film {
+  id: number;
   title: string;
   description: string;
   classification: string;

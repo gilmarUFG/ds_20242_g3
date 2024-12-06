@@ -1,4 +1,6 @@
+import { Film } from '../DetailsModal/types';
+
 export interface FilmCardProps {
-  src: string;
-  onClick: () => void;
+  film: Film;
+  onClick: (film: Film) => void;
 }

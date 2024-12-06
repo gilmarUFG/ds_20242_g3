@@ -3,9 +3,9 @@ import { Typography, Rating, Grid2 } from '@mui/material';
 import { CardContainer, ReviewContent } from './styles';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { format } from 'date-fns';
-import { Review } from '../MovieReviewsList/types';
+import { RatingById } from '../../../services/types';
 
-const ReviewCard = ({ review }: { review: Review }) => {
+const ReviewCard = ({ review }: { review: RatingById }) => {
   function formatDate(dateString: string): string {
     const date = new Date(dateString);
 
@@ -21,7 +21,7 @@ const ReviewCard = ({ review }: { review: Review }) => {
         >
           <Grid2 display={'flex'} alignItems={'center'} sx={{ gap: 1 }}>
             <AccountCircleIcon />
-            <Typography variant="h6">{review.user.username}</Typography>
+            <Typography variant="h6">{review.user.userName}</Typography>
           </Grid2>
           <p>{formatDate(review.date.toString())}</p>
         </Grid2>
