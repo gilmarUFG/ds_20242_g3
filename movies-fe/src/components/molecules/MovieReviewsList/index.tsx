@@ -11,8 +11,6 @@ import {
 import { useParams, useSearchParams } from 'react-router-dom';
 import { RatingById } from '../../../services/types';
 
-const reviewsPerPage = 4;
-
 function MovieReviewsList() {
   const [open, setOpen] = useState<boolean>(false);
   const [userAlreadyReviewed, setUserAlreadyReviewed] = useState<boolean>(true);
@@ -81,11 +79,7 @@ function MovieReviewsList() {
           </Grid2>
         ))}
       </Grid2>
-      <PaginationComponent
-        totalReviews={totalPages}
-        reviewsPerPage={reviewsPerPage}
-        onPageChange={paginate}
-      />
+      <PaginationComponent totalPages={totalPages} onPageChange={paginate} />
 
       <AddReviewFormModal open={open} setOpen={setOpen} />
     </Container>
