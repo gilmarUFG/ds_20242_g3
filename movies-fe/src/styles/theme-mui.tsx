@@ -11,6 +11,11 @@ const muiTheme = createTheme({
     info: {
       main: '#efeaea',
     },
+    text: {
+      primary: '#fff',
+      secondary: '#fff',
+      disabled: '#5e5b5b',
+    },
   },
 });
 
