@@ -1,60 +1,68 @@
 import { Grid2, Pagination } from '@mui/material';
 import { FilmCard } from '../../molecules/FilmCard';
 import DetailsModal from '../../molecules/DetailsModal';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Film } from '../../molecules/DetailsModal/types';
 import SearchBox from '../../atomic/SearchBox/SearchBox';
+import {
+  getRecommendations,
+  searchMovies,
+} from '../../../services/moviesService';
+import { useSearchParams } from 'react-router-dom';
+import { movieFormatter } from '../../../utils';
+import { Movie, Response } from '../../../services/types';
 
 export function Home() {
   const [open, setOpen] = useState(false);
-  const [film, setFilm] = useState<Film | null>(null);
   const [genre, setGenres] = useState(0);
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [selectedFilm, setSelectedFilm] = useState<Film | null>(null);
 
-  const mockedData = [
-    {
-      'title': 'Breaking Bad',
-      'description':
-        "A high school chemistry teacher turned methamphetamine producer partners with a former student to secure his family's future in this intense drama series.",
-      'classification': '18+',
-      'type': 'Série',
-      'categories': ['Crime', 'Drama', 'Thriller'],
-      'releaseYear': '2008',
-      'logoUrl': 'https://images7.alphacoders.com/617/617964.jpg',
+  const [films, setFilms] = useState<Film[]>([]);
+
+  const [searchParams] = useSearchParams();
+  const userId = searchParams.get('userId');
+
+  const updateFilms = (response: Response<Movie[]>) => {
+    const temp = movieFormatter(response.data);
+    setFilms(temp);
+    setTotalPages(response.pagination.totalPages);
+    setPage(response.pagination.page + 1);
+  };
+
+  const searchRecommendations = useCallback(
+    async (page = 1) => {
+      const response = await getRecommendations(Number(userId), page - 1);
+      updateFilms(response);
     },
-    {
-      'title': 'Lost',
-      'description':
-        'Survivors of a plane crash are forced to work together in order to survive on a seemingly deserted tropical island.',
-      'classification': '13+',
-      'type': 'Série',
-      'categories': ['Adventure', 'Drama', 'Mystery'],
-      'releaseYear': '2004',
-      'logoUrl':
-        'https://preview.redd.it/5jrav5nh0c171.png?width=1080&crop=smart&auto=webp&s=cb6b643bf0ea03c87adc561f55a439ed17a0270e',
-    },
-    {
-      'title': 'Game of Thrones',
-      'description':
-        'Nine noble families wage war against each other to gain control over the mythical land of Westeros, while an ancient enemy returns after being dormant for millennia.',
-      'classification': '18+',
-      'type': 'Série',
-      'categories': ['Adventure', 'Drama', 'Fantasy'],
-      'releaseYear': '2011',
-      'logoUrl':
-        'https://img.elo7.com.br/product/zoom/3A2377D/poster-adesivo-decorativo-game-of-thrones-a-serie-42-5x60cm-poster.jpg',
-    },
-  ];
+    [userId]
+  );
+
+  useEffect(() => {
+    if (userId) {
+      searchRecommendations();
+    }
+  }, [searchRecommendations, userId]);
 
   const handleClick = (film: Film) => {
     setOpen(true);
-    setFilm(film);
+    setSelectedFilm(film);
   };
 
   const handleClose = () => {
     setOpen(false);
-    setFilm(null);
+    setSelectedFilm(null);
+  };
+
+  const handleSearch = async (page = 1) => {
+    const response = await searchMovies(
+      page - 1,
+      genre === 0 ? undefined : genre,
+      query
+    );
+    updateFilms(response);
   };
 
   return (
@@ -62,7 +70,7 @@ export function Home() {
       <h1>Recomendados para você</h1>
       <SearchBox
         genre={genre}
-        query={query}
+        handleSearch={handleSearch}
         setQuery={setQuery}
         setGenre={setGenres}
       />
@@ -72,19 +80,23 @@ export function Home() {
         spacing={3}
         sx={{ gap: 5, justifyContent: 'center', display: 'flex' }}
       >
-        {mockedData.map((item) => (
-          <FilmCard src={item.logoUrl} onClick={() => handleClick(item)} />
+        {films.map((film) => (
+          <FilmCard film={film} onClick={handleClick} />
         ))}
       </Grid2>
-      {open && film && (
-        <DetailsModal onClose={handleClose} film={film} open={open} />
+      {open && selectedFilm && (
+        <DetailsModal onClose={handleClose} film={selectedFilm} open={open} />
       )}
 
       <Pagination
-        count={mockedData.length / 2}
+        count={totalPages}
         page={page}
-        onChange={(event, value) => {
-          setPage(value);
+        onChange={(_, value) => {
+          if (genre || query) {
+            handleSearch(value);
+            return;
+          }
+          searchRecommendations(value);
         }}
         color={'primary'}
         sx={{

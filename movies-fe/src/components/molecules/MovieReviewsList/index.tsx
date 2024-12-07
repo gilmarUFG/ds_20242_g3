@@ -1,53 +1,50 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Container, Grid2 } from '@mui/material';
 import PaginationComponent from '../../atomic/PaginationComponent/PaginationComponent';
 import AddIcon from '@mui/icons-material/Add';
 import ReviewCard from '../ReviewCard';
 import AddReviewFormModal from '../ReviewFormModal';
-import { Review } from './types';
-
-const reviews: Review[] = [
-  {
-    id: 1,
-    user: { username: 'João' },
-    rating: 4,
-    comment: 'Muito bom, gostei da história.',
-    date: '2024-12-05T14:45:30.123',
-  },
-  {
-    id: 2,
-    user: { username: 'Maria' },
-    rating: 3,
-    comment: 'O filme é interessante, mas poderia ser melhor.',
-    date: '2024-12-05T14:45:30.123',
-  },
-  {
-    id: 3,
-    user: { username: 'Carlos' },
-    rating: 5,
-    comment: 'Excelente! Muito bem feito.',
-    date: '2024-12-05T14:45:30.123',
-  },
-  {
-    id: 4,
-    user: { username: 'Ana' },
-    rating: 2,
-    comment: 'Acho que esperava mais, me decepcionou.',
-    date: '2024-12-05T14:45:30.123',
-  },
-];
-
-const reviewsPerPage = 2;
+import {
+  getRatingByMovieId,
+  getUserAlreadyRated,
+} from '../../../services/moviesService';
+import { useParams, useSearchParams } from 'react-router-dom';
+import { RatingById } from '../../../services/types';
 
 function MovieReviewsList() {
-  const [currentPage, setCurrentPage] = useState(1);
   const [open, setOpen] = useState<boolean>(false);
+  const [userAlreadyReviewed, setUserAlreadyReviewed] = useState<boolean>(true);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [reviews, setReviews] = useState<RatingById[]>([]);
 
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber: number) => getRating(pageNumber);
 
-  const indexOfLastReview = currentPage * reviewsPerPage;
-  const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
-  const currentReviews = reviews.slice(indexOfFirstReview, indexOfLastReview);
+  const [searchParams] = useSearchParams();
+  const userId = searchParams.get('userId');
+
+  let { id: movieId } = useParams<{ id: string }>();
+
+  const getRating = useCallback(
+    async (page = 1) => {
+      getRatingByMovieId(Number(movieId), page - 1).then((response) => {
+        console.log(response.data);
+        setReviews(response.data);
+        setTotalPages(response.pagination.totalPages);
+        console.log('chamou');
+      });
+    },
+    [movieId]
+  );
+
+  useEffect(() => {
+    getRating();
+  }, [getRating]);
+
+  useEffect(() => {
+    getUserAlreadyRated(Number(movieId), Number(userId)).then((response) => {
+      setUserAlreadyReviewed(response);
+    });
+  });
 
   return (
     <Container>
@@ -60,11 +57,13 @@ function MovieReviewsList() {
       >
         <h2>Reviews Populares</h2>
 
-        <Grid2>
-          <Button variant={'contained'} onClick={() => setOpen(true)}>
-            <AddIcon /> Adicionar review
-          </Button>
-        </Grid2>
+        {!userAlreadyReviewed && (
+          <Grid2>
+            <Button variant={'contained'} onClick={() => setOpen(true)}>
+              <AddIcon /> Adicionar review
+            </Button>
+          </Grid2>
+        )}
       </Grid2>
 
       <Grid2
@@ -74,17 +73,13 @@ function MovieReviewsList() {
         alignItems="center"
         justifyContent="center"
       >
-        {currentReviews.map((review) => (
+        {reviews.map((review) => (
           <Grid2 key={review.id}>
             <ReviewCard review={review} />
           </Grid2>
         ))}
       </Grid2>
-      <PaginationComponent
-        totalReviews={reviews.length}
-        reviewsPerPage={reviewsPerPage}
-        onPageChange={paginate}
-      />
+      <PaginationComponent totalPages={totalPages} onPageChange={paginate} />
 
       <AddReviewFormModal open={open} setOpen={setOpen} />
     </Container>

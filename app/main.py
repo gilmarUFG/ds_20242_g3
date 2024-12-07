@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends
 from pydantic import BaseModel
 from typing import Optional, List
 from models.recommender import Recommender
+import json
 
 app = FastAPI()
 
@@ -41,7 +42,7 @@ class RecommendationUserRequest(BaseModel):
 async def root():
     return {"message": "Bem-vindo à API de Recomendações!"}
 
-@app.get("/recommendations/content", summary="Recomendações baseadas em pesquisa")
+@app.post("/recommendations/content", summary="Recomendações baseadas em pesquisa")
 async def get_recommendations_content(
     payload: RecommendationContentRequest,
     recommender: Recommender = Depends(get_recommender)
@@ -50,9 +51,14 @@ async def get_recommendations_content(
     Retorna recomendações baseadas na barra de pesquisa fornecida pelo usuário.
     """
     recommendations = recommender.recommend_content(payload.search, payload.top_k)
-    return {"content_recommendations": recommendations}
+    recommendations_list = json.loads(recommendations)
 
-@app.get("/recommendations/user", summary="Recomendações baseadas em avaliações do usuário")
+    recommended_movie_ids = [item['tmdbId'] for item in recommendations_list]
+
+
+    return {"movieIds": recommended_movie_ids}
+
+@app.post("/recommendations/user", summary="Recomendações baseadas em avaliações do usuário")
 async def get_recommendations_user(
     payload: RecommendationUserRequest,
     recommender: Recommender = Depends(get_recommender)
@@ -81,8 +87,10 @@ async def get_recommendations_user(
     ]
     
     recommendations = recommender.recommend_user(user_ratings, payload.top_k)
-    
-    return {"user_recommendations": recommendations}
+    recommendations_list = json.loads(recommendations)
+
+    recommended_movie_ids = [item['tmdbId'] for item in recommendations_list]
+    return {"movieIds": recommended_movie_ids}
 
 if __name__ == "__main__":
     import uvicorn

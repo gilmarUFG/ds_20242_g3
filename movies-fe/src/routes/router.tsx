@@ -11,7 +11,7 @@ export const routes = createBrowserRouter([
     element: <Layout />,
     children: [
       { path: '', element: <Home /> },
-      { path: 'filme', element: <MovieView /> },
+      { path: 'filme/:id', element: <MovieView /> },
       { path: 'usuario/cadastrar', element: <UserForm /> },
     ],
   },

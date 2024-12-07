@@ -1,16 +1,28 @@
 import * as S from '../../molecules/DetailsModal/styles';
 import MovieReviewsList from '../../molecules/MovieReviewsList';
-import React from 'react';
-import { oneMovie } from '../../../mocks/mocks';
+import React, { useEffect, useState } from 'react';
 import { Grid2, IconButton } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { colors } from '../../../styles/colors';
-import { Link } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { Film } from '../../molecules/DetailsModal/types';
 
 function MovieView() {
+  const [searchParams] = useSearchParams();
+  const userId = searchParams.get('userId');
+
+  const [selectedFilm, setSelectedFilm] = useState<Film>();
+
+  useEffect(() => {
+    setSelectedFilm(JSON.parse(localStorage.getItem('selectedFilm') || '{}'));
+  }, []);
+
+  if (selectedFilm === undefined) {
+    return <h1>Carregando...</h1>;
+  }
+
   return (
     <Grid2>
-      <Link to={'/assista-ai'}>
+      <Link to={`/assista-ai?userId=${userId}`}>
         <IconButton
           color="primary"
           sx={{ marginLeft: 5, backgroundColor: 'white' }}
@@ -25,19 +37,23 @@ function MovieView() {
           alignItems={'center'}
           sx={{ gap: 10 }}
         >
-          <img src={oneMovie.posterPath} width={180} />
+          <img
+            src={selectedFilm.logoUrl}
+            width={180}
+            alt={selectedFilm.title}
+          />
 
           <Grid2>
-            <S.Title>{oneMovie.title}</S.Title>
+            <S.Title>{selectedFilm.title}</S.Title>
             <S.Info>
-              {oneMovie.genres.map((genre) => (
+              {selectedFilm.categories.map((genre) => (
                 <>
                   {' '}
-                  • <span>{genre.name}</span>
+                  • <span>{genre}</span>
                 </>
               ))}
             </S.Info>
-            <S.Description>{oneMovie.overview}</S.Description>
+            <S.Description>{selectedFilm.description}</S.Description>
           </Grid2>
         </Grid2>
       </S.Content>

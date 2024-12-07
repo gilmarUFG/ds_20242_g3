@@ -1,5 +1,4 @@
 export interface PaginationComponentOptions {
-  totalReviews: number;
-  reviewsPerPage: number;
+  totalPages: number;
   onPageChange: (page: number) => void;
 }
