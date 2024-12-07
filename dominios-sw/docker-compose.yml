@@ -1,31 +1,18 @@
 version: '3.8'
 services:
-  postgres:
-    image: amadeulee/postgres-filmesdb:v1.0.4
-    container_name: postgres_filmesdb
-    environment:
-      POSTGRES_USER: filmes_user
-      POSTGRES_PASSWORD: filmes_password
-      POSTGRES_DB: filmesdb
-    ports:
-      - "5433:5432"
-    networks:
-      - app_network
-
   app:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: spring_app
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/filmesdb
+      SPRING_DATASOURCE_URL: jdbc:postgresql://18.217.112.15:5433/filmesdb
       SPRING_DATASOURCE_USERNAME: filmes_user
       SPRING_DATASOURCE_PASSWORD: filmes_password
       FASTAPI_URL: http://fastapi:8000
     ports:
       - "8080:8080"
     depends_on:
-      - postgres
       - fastapi
     networks:
       - app_network

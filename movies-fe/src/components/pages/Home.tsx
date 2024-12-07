@@ -1,5 +1,7 @@
 import { Grid2 } from '@mui/material';
 import { FilmCard } from '../atomic/Card';
+import SearchBox from '../atomic/SearchBox/SearchBox';
+import { useNavigate } from 'react-router-dom';
 
 export function Home() {
   const listFilm = [
@@ -7,9 +9,15 @@ export function Home() {
     'https://starwars-visualguide.com/assets/img/films/2.jpg',
     'https://starwars-visualguide.com/assets/img/films/3.jpg',
   ];
+  const navigate = useNavigate();
+  function handleNavigation(id: number) {
+    navigate('/filmes/' + id);
+  }
+
   return (
     <Grid2 container className="container">
       <h1>Filmes</h1>
+
       <Grid2
         container
         spacing={3}

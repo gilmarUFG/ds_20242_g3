@@ -8,7 +8,7 @@ export const GlobalStyle = createGlobalStyle`
         --purpleh1: #312257;
         --white: #f3f5f7;
         --light: #31213e;
-        --dark: #070325;
+        --dark: rgb(32, 26, 76);
         --primary: #13114a;
 
     }
@@ -20,7 +20,6 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     html {
-        height: 100%;
 
         @media (max-width: 1080px) {
             font-size: 93.75%;
@@ -61,12 +60,12 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     .nav-bar {
-        background: var(--background);
+        background: linear-gradient(135deg, #31213e 0%, #191249 50%, #070325 100%);
         margin-bottom: 50px;
     }
 
     .container {
-        padding: 50px;
+        padding: 20px;
         display: flex;
         justify-content: center;
         flex-direction: column;
@@ -99,5 +98,24 @@ export const GlobalStyle = createGlobalStyle`
         0 0 30px rgb(137, 104, 161);
         text-decoration: none;
         color: var(--white);
+    }
+
+    .menu-item {
+        color: var(--white);
+    }
+
+    .user-form-container {
+        background-color: var(--purpleh1);
+        max-width: 400px;
+        padding: 50px;
+        color: var(--white);
+
+
+    }
+
+    .control-field {
+        color: var(--white);
+        border-radius: 10px;
+        background-color: var(--white);
     }
 `;

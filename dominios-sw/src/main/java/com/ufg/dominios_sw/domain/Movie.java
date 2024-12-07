@@ -1,6 +1,7 @@
 package com.ufg.dominios_sw.domain;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,6 +33,9 @@ public class Movie {
     private String posterPath;
     private double voteAverage;
     private int voteCount;
+
+    @Column(name = "release_date")
+    private LocalDate releaseDate;
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rating> ratings = new ArrayList<>();

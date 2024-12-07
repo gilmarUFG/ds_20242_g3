@@ -8,7 +8,7 @@ public class RatingValidator implements ConstraintValidator<ValidRating, Double>
     @Override
     public boolean isValid(Double value, ConstraintValidatorContext context) {
         if (value == null) {
-            return false;
+            return true;
         }
 
         if (value < 0.5 || value > 5.0) {
